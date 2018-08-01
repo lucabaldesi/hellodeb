@@ -8,10 +8,19 @@ MAINTAINER="Luca Baldesi <luca.baldesi@unitn.it>"
 DESC="Optional description is missing"
 BUILD_DIRS="usr/"
 DEPS=""
+BUILD_DEPS="bc"
 # more conf fields are available, check:
 # http://www.debian.org/doc/debian-policy/ch-controlfields.html
 
 WD="$PWD"
+
+# propose build dependencies
+echo "Please install the following development files:"
+echo "apt install $BUILD_DEPS -o APT::Install-Recommends=0 -o APT::Install-Suggests=0"
+read -n1 -r -p "Press \"q\" to exit or anything else to continue." key
+if [ "$key" = 'q' ]; then
+    echo ""; exit 0;
+fi
 
 # build our software
 wget -O hello-2.7.tar.gz "http://ftp.gnu.org/gnu/hello/hello-2.7.tar.gz"
@@ -39,7 +48,7 @@ Priority: $PRIORITY
 Architecture: $ARCH
 Installed-Size: `du -ks $BUILD_DIRS | cut -f 1 | paste -sd+ - | bc`
 Maintainer: $MAINTAINER
-Build-Depends: $DEPS
+Depends: $DEPS
 Description: $DESC
 EOL
 
